@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Diseño y programo tu tienda online desde cero: tu marca, tu dominio, cobros con Mercado Pago y transferencia, y un panel para manejar ventas y envíos.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Tu tienda online propia">
+<meta property="og:description" content="Diseño y programo tu tienda online desde cero: tu marca, tu dominio, cobros con Mercado Pago y transferencia, y un panel para manejar ventas y envíos.">
+<title>Tu Tienda Online Propia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Layout: hoja de especificación técnica. Columna de lectura amplia sobre fondo cuadriculado tenue;
+     cada bloque lleva su "etiqueta técnica" en mono, y el hero muestra el recorrido real de una compra. */
+  :root {
+    --paper: #f6f7f9;
+    --sheet: #ffffff;
+    --ink: #121722;
+    --muted: #5a6273;
+    --rule: #dfe3ea;
+    --grid: rgba(37, 64, 160, 0.06);
+    --cobalt: #2a46c9;
+    --cobalt-soft: #e8ecfb;
+    --amber: #b5650d;
+    --amber-soft: #fbf0e2;
+    --ok: #237a4b;
+    --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #0e121a; --sheet: #151a25; --ink: #e9edf5; --muted: #9aa3b5; --rule: #262d3c;
+      --grid: rgba(120, 150, 255, 0.06); --cobalt: #8ea2ff; --cobalt-soft: #1d2647;
+      --amber: #f0a75a; --amber-soft: #2c2215; --ok: #6fcf97; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0e121a; --sheet: #151a25; --ink: #e9edf5; --muted: #9aa3b5; --rule: #262d3c;
+    --grid: rgba(120, 150, 255, 0.06); --cobalt: #8ea2ff; --cobalt-soft: #1d2647;
+    --amber: #f0a75a; --amber-soft: #2c2215; --ok: #6fcf97; color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background-color: var(--paper);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--ink); font: 16.5px/1.65 var(--body);
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding-inline: 20px; padding-block: 0 80px; }
+  a { color: var(--cobalt); text-underline-offset: 3px; }
+  a:focus-visible, summary:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 2px; }
+  p { margin: 0 0 12px; }
+  h1, h2, h3 { text-wrap: balance; margin: 0; }
+  h2 { font-family: var(--display); font-weight: 800; font-size: clamp(26px, 4vw, 36px); line-height: 1.12; letter-spacing: -0.01em; }
+  h3 { font-size: 18px; line-height: 1.3; }
+
+  .tag { font: 500 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--cobalt); }
+  .chip { display: inline-block; font: 400 12.5px/1.4 var(--mono); padding: 3px 8px; border-radius: 6px; background: var(--cobalt-soft); color: var(--cobalt); white-space: nowrap; }
+
+  section { margin-top: 72px; }
+  .head { display: grid; gap: 10px; margin-bottom: 26px; max-width: 70ch; }
+  .head p { color: var(--muted); margin: 0; font-size: 17px; }
+
+  /* ===== Hero ===== */
+  .hero { padding-block: 56px 8px; display: grid; gap: 22px; }
+  .hero h1 { font-family: var(--display); font-weight: 800; font-size: clamp(38px, 7.2vw, 72px); line-height: 1.02; letter-spacing: -0.025em; max-width: 15ch; }
+  .hero h1 em { font-style: normal; color: var(--cobalt); }
+  .hero .lead { font-size: 19px; color: var(--muted); max-width: 60ch; margin: 0; }
+
+  .flow { margin-top: 10px; background: var(--sheet); border: 1px solid var(--rule); border-radius: 16px; padding: 18px; }
+  .flow__label { margin-bottom: 14px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; }
+  .flow__label span:last-child { font: 400 12.5px var(--mono); color: var(--muted); }
+  .flow__steps { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; }
+  .flow__steps li { flex: 1 1 140px; min-width: 0; padding: 12px 12px 10px; border-radius: 10px; background: var(--paper); border: 1px solid var(--rule); position: relative; }
+  .flow__steps li strong { display: block; font-size: 14.5px; }
+  .flow__steps li code { display: block; margin-top: 4px; font: 400 12px/1.35 var(--mono); color: var(--cobalt); overflow-wrap: anywhere; }
+  .flow__steps li small { display: block; margin-top: 4px; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
+
+  /* ===== Qué incluye ===== */
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 16px; overflow: hidden; }
+  .feature { background: var(--sheet); padding: 22px 22px 20px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .feature p { margin: 0; color: var(--muted); font-size: 15.5px; }
+  .feature .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+
+  /* ===== Medios de pago ===== */
+  .table-scroll { overflow-x: auto; background: var(--sheet); border: 1px solid var(--rule); border-radius: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 640px; }
+  th, td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font: 500 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  tr:last-child td { border-bottom: 0; }
+  td strong { display: block; }
+  .pill { display: inline-block; font-size: 12.5px; font-weight: 600; padding: 2px 9px; border-radius: 99px; white-space: nowrap; }
+  .pill--in { background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ok); }
+  .pill--opt { background: var(--amber-soft); color: var(--amber); }
+  .footnote { margin-top: 12px; font-size: 14px; color: var(--muted); max-width: 80ch; }
+
+  /* ===== Paquetes ===== */
+  .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; align-items: start; }
+  .plan { background: var(--sheet); border: 1px solid var(--rule); border-radius: 16px; padding: 24px; display: grid; gap: 14px; min-width: 0; }
+  .plan--main { border: 2px solid var(--cobalt); }
+  .plan__name { font-family: var(--display); font-weight: 800; font-size: 26px; line-height: 1.1; }
+  .plan__for { color: var(--muted); font-size: 15px; margin: 0; }
+  .plan ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; font-size: 15px; }
+  .plan li { display: grid; grid-template-columns: 18px 1fr; gap: 8px; }
+  .plan li::before { content: "✓"; color: var(--cobalt); font-weight: 700; }
+  .plan li.plus::before { content: "+"; }
+  .plan__price { padding-block: 12px; border-block: 1px dashed var(--rule); font: 500 13px var(--mono); letter-spacing: .03em; color: var(--muted); }
+  .plan__price strong { display: block; font: 800 44px/1 var(--display); letter-spacing: -0.02em; color: var(--ink); margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+  .plan--main .plan__price strong { color: var(--cobalt); }
+  .badge { justify-self: start; font: 500 11.5px var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 4px 9px; border-radius: 6px; background: var(--cobalt); color: var(--sheet); }
+  .badge--alt { background: var(--cobalt-soft); color: var(--cobalt); }
+
+  /* Tarjeta Premium: va después de .plan y .badge para que sus colores ganen */
+  .mini { display: block; font: 400 12px/1.4 var(--mono); color: var(--muted); margin-top: 2px; }
+  .plan li .mini { grid-column: 2; margin-top: -4px; }
+  .plan.plan--premium { background: var(--ink); color: var(--sheet); border-color: var(--ink); }
+  .plan.plan--premium .plan__for,
+  .plan.plan--premium .plan__price { color: color-mix(in srgb, var(--sheet) 72%, transparent); }
+  .plan.plan--premium .plan__price { border-color: color-mix(in srgb, var(--sheet) 22%, transparent); }
+  .plan.plan--premium .plan__price strong { color: var(--sheet); }
+  .plan.plan--premium li::before { color: var(--amber); }
+  .plan.plan--premium .mini { color: color-mix(in srgb, var(--sheet) 62%, transparent); }
+  .badge.badge--premium { background: var(--amber); color: var(--ink); }
+  .plans__note { margin-top: 14px; font-size: 15px; color: var(--muted); max-width: 70ch; }
+
+  /* ===== Proceso ===== */
+  .process { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; counter-reset: fase; }
+  .process li { counter-increment: fase; padding: 18px 18px 16px; border-top: 3px solid var(--cobalt); background: var(--sheet); border-radius: 0 0 12px 12px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+  .process li::before { content: "Fase " counter(fase); font: 500 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--cobalt); }
+  .process p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  /* ===== Qué es tuyo ===== */
+  .owned { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 16px; overflow: hidden; }
+  .owned__item { background: var(--sheet); padding: 18px; display: grid; gap: 4px; align-content: start; min-width: 0; }
+  .owned__item strong { font-size: 15.5px; }
+  .owned__item span { color: var(--muted); font-size: 14.5px; }
+
+  /* ===== Caso ===== */
+  .cases { display: grid; gap: 16px; }
+  .case { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 24px; background: var(--sheet); border: 1px solid var(--rule); border-radius: 18px; padding: 26px; align-items: center; }
+  .case__kind { display: inline-block; margin-bottom: 10px; font: 500 11.5px var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 4px 9px; border-radius: 6px; background: var(--cobalt-soft); color: var(--cobalt); }
+  .case__name { font-family: var(--display); font-weight: 800; font-size: 34px; line-height: 1; letter-spacing: .01em; }
+  .case__desc { margin: 10px 0 8px; color: var(--muted); }
+  .case__url { font: 500 14px var(--mono); }
+  .case ul { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; font-size: 15px; }
+  .case li { padding-left: 14px; border-left: 2px solid var(--cobalt); }
+
+  /* ===== Glosario ===== */
+  .glossary { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0 28px; margin: 0; }
+  .glossary div { padding: 14px 0; border-bottom: 1px solid var(--rule); min-width: 0; }
+  .glossary dt { font: 500 14px var(--mono); color: var(--cobalt); }
+  .glossary dd { margin: 4px 0 0; color: var(--muted); font-size: 15px; }
+
+  /* ===== FAQ ===== */
+  .faq { display: grid; gap: 10px; max-width: 820px; }
+  details { background: var(--sheet); border: 1px solid var(--rule); border-radius: 12px; padding: 14px 18px; }
+  summary { cursor: pointer; font-weight: 600; }
+  details p { margin: 10px 0 2px; color: var(--muted); font-size: 15.5px; }
+
+  /* ===== Cierre ===== */
+  .close { margin-top: 80px; padding: 34px 28px; border-radius: 20px; background: var(--cobalt); color: var(--sheet); display: grid; gap: 10px; }
+  .close h2 { color: var(--sheet); }
+  .close p { margin: 0; max-width: 62ch; opacity: .9; font-size: 17px; }
+
+  /* ===== WhatsApp (verde de la marca WhatsApp, igual en los dos temas) ===== */
+  .close__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 10px; }
+  .wa-btn {
+    display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border-radius: 999px;
+    background: #25d366; color: #08341a; font-weight: 700; font-size: 17px; text-decoration: none;
+    box-shadow: 0 8px 22px rgba(8, 52, 26, 0.25); transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .wa-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(8, 52, 26, 0.3); }
+  .wa-btn:focus-visible { outline: 3px solid var(--sheet); outline-offset: 3px; }
+  .wa-btn svg, .wa-float svg { width: 22px; height: 22px; fill: currentColor; flex: none; }
+  .close__number { display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; font: 500 16px var(--mono); }
+  .close__number span { user-select: all; }
+  .copy-btn {
+    border: 1px solid color-mix(in srgb, var(--sheet) 45%, transparent); background: transparent; color: inherit;
+    border-radius: 999px; padding: 6px 12px; font: 600 13px var(--body); cursor: pointer;
+  }
+  .copy-btn:hover { background: color-mix(in srgb, var(--sheet) 14%, transparent); }
+  .copy-btn:focus-visible { outline: 2px solid var(--sheet); outline-offset: 2px; }
+
+  .wa-float {
+    position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 20;
+    display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px 12px 14px; border-radius: 999px;
+    background: #25d366; color: #08341a; font-weight: 700; font-size: 15px; text-decoration: none;
+    box-shadow: 0 10px 26px rgba(8, 52, 26, 0.3); transition: transform .15s ease;
+  }
+  .wa-float:hover { transform: scale(1.04); }
+  .wa-float:focus-visible { outline: 3px solid var(--cobalt); outline-offset: 3px; }
+
+  .plan__cta {
+    display: block; text-align: center; padding: 12px 16px; border-radius: 12px; font-weight: 700; font-size: 15px;
+    text-decoration: none; border: 1.5px solid var(--cobalt); color: var(--cobalt); transition: background .15s ease, color .15s ease;
+  }
+  .plan__cta:hover { background: var(--cobalt-soft); }
+  .plan--main .plan__cta { background: var(--cobalt); color: var(--sheet); }
+  .plan--main .plan__cta:hover { background: color-mix(in srgb, var(--cobalt) 88%, var(--ink)); }
+  .plan.plan--premium .plan__cta { background: var(--amber); border-color: var(--amber); color: var(--ink); }
+  .plan.plan--premium .plan__cta:hover { background: color-mix(in srgb, var(--amber) 88%, var(--sheet)); }
+  .plan__cta:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 3px; }
+
+  @media (max-width: 700px) {
+    .wa-float span { display: none; }
+    .wa-float { padding: 14px; }
+    .case { grid-template-columns: 1fr; }
+    .case ul { grid-template-columns: 1fr; }
+    section { margin-top: 56px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="wrap">
+
+  <!-- ===== Portada ===== -->
+  <header class="hero">
+    <span class="tag">Propuesta · Desarrollo web a medida</span>
+    <h1>Tu tienda online propia, <em>cobrando con tarjeta</em> desde el primer día</h1>
+    <p class="lead">Diseño y programo tu página desde cero: tu marca, tu dominio, cobros con Mercado Pago y transferencia, y un panel para manejar ventas y envíos. Sin plantillas, sin comisión de plataforma por cada venta y con un único pago.</p>
+
+    <div class="flow" aria-label="Recorrido de una compra">
+      <div class="flow__label"><span class="tag">Así funciona una compra</span><span>de punta a punta, en tiempo real</span></div>
+      <ol class="flow__steps">
+        <li><strong>El cliente elige</strong><code>catálogo · carrito</code><small>Color, cantidad y datos de envío.</small></li>
+        <li><strong>Paga</strong><code>Checkout Pro · API de Preferences</code><small>Débito, crédito o transferencia.</small></li>
+        <li><strong>Mercado Pago avisa</strong><code>webhook firmado (HMAC)</code><small>El pago se confirma solo.</small></li>
+        <li><strong>Se registra la venta</strong><code>PostgreSQL · RLS</code><small>Aparece en tu panel como pagada.</small></li>
+        <li><strong>Le llega el mail</strong><code>SPF · DKIM · DMARC</code><small>Confirmación con tu marca.</small></li>
+        <li><strong>Despachás</strong><code>panel · seguimiento</code><small>Con código y aviso por WhatsApp.</small></li>
+      </ol>
+    </div>
+  </header>
+
+  <!-- ===== Qué incluye ===== -->
+  <section aria-labelledby="incluye">
+    <div class="head">
+      <span class="tag">Alcance</span>
+      <h2 id="incluye">Qué incluye</h2>
+      <p>Cada parte está pensada para que vendas más y trabajes menos. Abajo de cada una te dejo cómo se llama técnicamente, por si te lo preguntan.</p>
+    </div>
+    <div class="features">
+      <article class="feature">
+        <h3>Diseño a medida, pensado para el celular</h3>
+        <p>Tu logo, tus colores y tus fotos. La mayoría de tus clientes compra desde el teléfono, así que se diseña primero para esa pantalla.</p>
+        <div class="chips"><span class="chip">UI/UX</span><span class="chip">responsive</span><span class="chip">mobile-first</span></div>
+      </article>
+      <article class="feature">
+        <h3>Dominio propio y candado de seguridad</h3>
+        <p>Tu dirección tipo <strong>tunegocio.com</strong>, con el candado que muestra que la página es segura para pagar.</p>
+        <div class="chips"><span class="chip">dominio .com / .com.ar</span><span class="chip">DNS</span><span class="chip">SSL · HTTPS</span></div>
+      </article>
+      <article class="feature">
+        <h3>Publicación rápida y siempre online</h3>
+        <p>La página vive en servidores en la nube que la entregan rápido desde cualquier lugar. Cada cambio se publica en minutos.</p>
+        <div class="chips"><span class="chip">hosting cloud</span><span class="chip">CDN</span><span class="chip">deploy continuo</span></div>
+      </article>
+      <article class="feature">
+        <h3>Tienda con carrito y pantalla de compra</h3>
+        <p>Galería de fotos, variantes (color, talle), carrito y un checkout que pide nombre, contacto y dirección completa, con los datos revisados antes de enviar.</p>
+        <div class="chips"><span class="chip">e-commerce</span><span class="chip">checkout</span><span class="chip">validación de formularios</span></div>
+      </article>
+      <article class="feature">
+        <h3>Cobros con tarjeta y transferencia</h3>
+        <p>Débito, crédito y dinero en cuenta por Mercado Pago, más transferencia bancaria coordinada por WhatsApp. Los precios se controlan en el servidor, así nadie puede cambiarlos.</p>
+        <div class="chips"><span class="chip">pasarela de pagos</span><span class="chip">Mercado Pago Checkout Pro</span><span class="chip">validación server-side</span></div>
+      </article>
+      <article class="feature">
+        <h3>Confirmación automática del pago</h3>
+        <p>Cuando Mercado Pago aprueba un pago, la venta se marca como pagada sola. La página verifica que el aviso venga de verdad de Mercado Pago.</p>
+        <div class="chips"><span class="chip">webhooks</span><span class="chip">firma HMAC-SHA256</span><span class="chip">idempotencia</span></div>
+      </article>
+      <article class="feature">
+        <h3>Panel de administración</h3>
+        <p>Desde el celular cambiás precios y precios de oferta, ordenás las fotos, ves las ventas del mes y manejás los envíos (por enviar, enviado, entregado).</p>
+        <div class="chips"><span class="chip">backoffice</span><span class="chip">login seguro</span><span class="chip">roles de administrador</span></div>
+      </article>
+      <article class="feature">
+        <h3>Base de datos segura</h3>
+        <p>Productos, pedidos y clientes guardados en una base de datos profesional, con reglas que impiden que alguien de afuera vea o cambie información.</p>
+        <div class="chips"><span class="chip">PostgreSQL</span><span class="chip">Row Level Security</span><span class="chip">backups</span></div>
+      </article>
+      <article class="feature">
+        <h3>Mails automáticos con tu marca</h3>
+        <p>Al pagar, el cliente recibe un mail de confirmación desde tu dominio (por ejemplo, pedidos@tunegocio.com), configurado para no caer en spam.</p>
+        <div class="chips"><span class="chip">mails transaccionales</span><span class="chip">SPF</span><span class="chip">DKIM</span><span class="chip">DMARC</span></div>
+      </article>
+      <article class="feature">
+        <h3>WhatsApp integrado</h3>
+        <p>Botón flotante para consultas, y pedidos por transferencia que te llegan con el detalle, el total y la dirección ya escritos.</p>
+        <div class="chips"><span class="chip">deep links wa.me</span><span class="chip">mensajes pre-armados</span></div>
+      </article>
+      <article class="feature">
+        <h3>Preparada para Google y redes</h3>
+        <p>Título, descripción e imagen correctos para que el link se vea bien al compartirlo, y alta en Google para que te encuentren.</p>
+        <div class="chips"><span class="chip">SEO técnico</span><span class="chip">Open Graph</span><span class="chip">Google Search Console</span></div>
+      </article>
+      <article class="feature">
+        <h3>Capacitación y acompañamiento</h3>
+        <p>Te enseño a usar el panel, te dejo un instructivo paso a paso y quedo disponible para dudas después del lanzamiento.</p>
+        <div class="chips"><span class="chip">onboarding</span><span class="chip">documentación</span></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== Medios de pago ===== -->
+  <section aria-labelledby="pagos">
+    <div class="head">
+      <span class="tag">Cobros</span>
+      <h2 id="pagos">Medios de pago</h2>
+      <p>Tu cliente elige cómo pagar. La plata va directo a tu cuenta, sin intermediarios.</p>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Medio</th><th>Cómo funciona</th><th>Cuándo se acredita</th><th>Incluido</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Tarjeta de débito</strong></td>
+            <td>El cliente carga su tarjeta en la pantalla segura de Mercado Pago. Puede pagar sin tener cuenta.</td>
+            <td>Según el plazo que elijas en tu cuenta de Mercado Pago</td>
+            <td><span class="pill pill--in">Incluido</span></td>
+          </tr>
+          <tr>
+            <td><strong>Tarjeta de crédito</strong></td>
+            <td>Visa, Mastercard, American Express, Naranja, Cabal y otras. En 1 pago.</td>
+            <td>Según el plazo que elijas en tu cuenta de Mercado Pago</td>
+            <td><span class="pill pill--in">Incluido</span></td>
+          </tr>
+          <tr>
+            <td><strong>Cuotas con tarjeta de crédito</strong></td>
+            <td>Se activa si querés. Pueden ser con interés (lo paga el comprador) o sin interés (el costo lo asumís vos), según lo que permita tu cuenta.</td>
+            <td>Igual que la tarjeta de crédito</td>
+            <td><span class="pill pill--opt">Opcional</span></td>
+          </tr>
+          <tr>
+            <td><strong>Dinero en cuenta de Mercado Pago</strong></td>
+            <td>Si el cliente tiene cuenta, puede pagar con su saldo.</td>
+            <td>Según el plazo que elijas en tu cuenta de Mercado Pago</td>
+            <td><span class="pill pill--in">Incluido</span></td>
+          </tr>
+          <tr>
+            <td><strong>Transferencia bancaria</strong></td>
+            <td>El pedido te llega por WhatsApp con todos los datos; le pasás tu alias o CBU y confirmás la venta en el panel con un toque.</td>
+            <td>Al instante, en tu banco o billetera</td>
+            <td><span class="pill pill--in">Incluido</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="footnote">Mercado Pago cobra una comisión por cada venta con tarjeta, que depende del plazo de acreditación (cuanto antes querés la plata, mayor es la comisión) y de las cuotas. La transferencia no tiene comisión de Mercado Pago. Los porcentajes los define Mercado Pago y los ves en tu cuenta.</p>
+  </section>
+
+  <!-- ===== Paquetes ===== -->
+  <section aria-labelledby="paquetes">
+    <div class="head">
+      <span class="tag">Paquetes</span>
+      <h2 id="paquetes">Elegí tu tienda</h2>
+      <p>Pagás una sola vez el desarrollo y la tienda es tuya. Si empezás con un paquete, más adelante podés pasar al siguiente sin empezar de cero.</p>
+    </div>
+    <div class="plans">
+      <article class="plan plan--main">
+        <span class="badge">Para empezar a vender</span>
+        <div class="plan__name">Tienda</div>
+        <p class="plan__for">Para vender online con cobro automático.</p>
+        <div class="plan__price"><strong>USD 500</strong>Pago único · sin costos mensuales</div>
+        <ul>
+          <li>Diseño a medida con tu marca, pensado para el celular</li>
+          <li>Dominio propio con HTTPS</li>
+          <li>Catálogo con galería y variantes</li>
+          <li>Carrito y checkout con datos de envío</li>
+          <li>Mercado Pago: débito, crédito y dinero en cuenta</li>
+          <li>Transferencia por WhatsApp</li>
+          <li>Confirmación automática del pago (webhooks)</li>
+          <li>Panel: precios, fotos, ventas y envíos</li>
+          <li>Mail de confirmación con tu marca</li>
+          <li>Botón de WhatsApp y preparada para Google y redes</li>
+          <li>Capacitación e instructivo</li>
+        </ul>
+        <a class="plan__cta" href="https://wa.me/5491131100949?text=Hola!%20Me%20interesa%20el%20paquete%20Tienda%20(USD%20500)." target="_blank" rel="noopener">Quiero Tienda</a>
+      </article>
+      <article class="plan">
+        <span class="badge badge--alt">Para crecer</span>
+        <div class="plan__name">Tienda Pro</div>
+        <p class="plan__for">Para catálogos grandes y más ventas.</p>
+        <div class="plan__price"><strong>USD 800</strong>Pago único · sin costos mensuales</div>
+        <ul>
+          <li>Todo lo de Tienda</li>
+          <li class="plus">Carga de productos nuevos desde el panel</li>
+          <li class="plus">Cuotas con o sin interés</li>
+          <li class="plus">Cupones y descuentos</li>
+          <li class="plus">Cálculo de envío por código postal</li>
+          <li class="plus">Estadísticas de ventas</li>
+          <li class="plus">Mails de "pedido despachado"</li>
+        </ul>
+        <a class="plan__cta" href="https://wa.me/5491131100949?text=Hola!%20Me%20interesa%20el%20paquete%20Tienda%20Pro%20(USD%20800)." target="_blank" rel="noopener">Quiero Tienda Pro</a>
+      </article>
+      <article class="plan plan--premium">
+        <span class="badge badge--premium">Para vender con publicidad</span>
+        <div class="plan__name">Tienda Premium</div>
+        <p class="plan__for">Para medir tus anuncios y manejar el negocio completo desde el panel.</p>
+        <div class="plan__price"><strong>USD 1500</strong>Pago único · sin costos mensuales</div>
+        <ul>
+          <li>Todo lo de Tienda Pro</li>
+          <li class="plus">Píxel de Meta conectado: medís visitas, carritos y ventas de tus anuncios de Instagram y Facebook <span class="mini">ViewContent · AddToCart · Purchase</span></li>
+          <li class="plus">Google Analytics 4 con medición de ventas <span class="mini">GA4 · eventos de e-commerce</span></li>
+          <li class="plus">Catálogo conectado a Instagram y Facebook Shopping <span class="mini">feed de productos para Meta</span></li>
+          <li class="plus">Cotizador del dólar en tiempo real dentro del panel (oficial y blue)</li>
+          <li class="plus">Opción de cargar precios en dólares y que se pasen a pesos solos</li>
+          <li class="plus">Control de stock por producto y color</li>
+          <li class="plus">Aviso por mail a vos cada vez que entra una venta</li>
+          <li class="plus">Exportar ventas y clientes a Excel</li>
+          <li class="plus">Barra de promociones editable desde el panel</li>
+          <li class="plus">Logo vectorizado en alta calidad <span class="mini">SVG · PDF</span></li>
+          <li class="plus">Kit para redes: foto de perfil, portada y código QR de tu tienda</li>
+        </ul>
+        <a class="plan__cta" href="https://wa.me/5491131100949?text=Hola!%20Me%20interesa%20el%20paquete%20Tienda%20Premium%20(USD%201500)." target="_blank" rel="noopener">Quiero Tienda Premium</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== Proceso ===== -->
+  <section aria-labelledby="proceso">
+    <div class="head">
+      <span class="tag">Metodología</span>
+      <h2 id="proceso">Cómo trabajamos</h2>
+      <p>Vas viendo el avance en cada fase y aprobás antes de seguir.</p>
+    </div>
+    <ol class="process">
+      <li><h3>Relevamiento</h3><p>Charlamos sobre tu negocio, qué vendés, cómo cobrás y cómo enviás.</p></li>
+      <li><h3>Diseño</h3><p>Te muestro la propuesta visual con tu marca y la ajustamos juntos.</p></li>
+      <li><h3>Desarrollo</h3><p>Programo la tienda, el panel y la base de datos, y cargo tus productos.</p></li>
+      <li><h3>Integraciones y pruebas</h3><p>Conecto Mercado Pago, mails y dominio. Hacemos una compra real de prueba.</p></li>
+      <li><h3>Lanzamiento</h3><p>Publicamos la tienda, te capacito con el panel y te dejo el instructivo.</p></li>
+      <li><h3>Acompañamiento</h3><p>Quedo disponible para dudas y ajustes después del lanzamiento.</p></li>
+    </ol>
+  </section>
+
+  <!-- ===== Propiedad y costos ===== -->
+  <section aria-labelledby="propiedad">
+    <div class="head">
+      <span class="tag">Transparencia</span>
+      <h2 id="propiedad">Todo queda a tu nombre</h2>
+      <p>Vos sos dueño de tu tienda. Yo la diseño, la programo y la mantengo.</p>
+    </div>
+    <div class="owned">
+      <div class="owned__item"><strong>El dominio</strong><span>tunegocio.com, registrado a tu nombre.</span></div>
+      <div class="owned__item"><strong>Tu cuenta de Mercado Pago</strong><span>La plata de cada venta entra directo ahí.</span></div>
+      <div class="owned__item"><strong>Hosting, base de datos y mails</strong><span>Las cuentas de cada servicio quedan a tu nombre.</span></div>
+      <div class="owned__item"><strong>El código de la página</strong><span>En un repositorio a tu nombre.</span></div>
+      <div class="owned__item"><strong>Tus clientes y tus ventas</strong><span>Los datos son tuyos y los ves en tu panel.</span></div>
+    </div>
+  </section>
+
+  <!-- ===== Caso real ===== -->
+  <section aria-labelledby="caso">
+    <div class="head">
+      <span class="tag">Proyectos</span>
+      <h2 id="caso">Tiendas en funcionamiento</h2>
+      <p>Entrá y probalas: son tiendas reales, vendiendo hoy.</p>
+    </div>
+    <div class="cases">
+      <article class="case">
+        <div>
+          <span class="case__kind">Proyecto propio</span>
+          <div class="case__name">Camisetas Zeus</div>
+          <p class="case__desc">Mi tienda de camisetas de rugby, de La Plata. La diseñé, la programé y la uso para vender a todo el país. Incluye varias funciones del paquete Premium.</p>
+          <a class="case__url" href="https://www.camisetaszeus.com" target="_blank" rel="noopener">camisetaszeus.com</a>
+        </div>
+        <ul>
+          <li>Catálogo de más de 50 modelos</li>
+          <li>Control de stock, con entrega inmediata y modelos por encargo</li>
+          <li>Píxel de Meta conectado para medir los anuncios</li>
+          <li>Cotizador del dólar en tiempo real en el panel</li>
+          <li>Logo vectorizado</li>
+          <li>Secciones de niños y mayorista</li>
+          <li>Guía de talles</li>
+          <li>Transferencia, débito, crédito y Mercado Pago</li>
+          <li>Envíos a todo el país</li>
+          <li>Panel de administración de pedidos</li>
+        </ul>
+      </article>
+      <article class="case">
+        <div>
+          <span class="case__kind">Cliente</span>
+          <div class="case__name">GOLDEN</div>
+          <p class="case__desc">Tienda de productos importados, con cobro automático y panel de gestión.</p>
+          <a class="case__url" href="https://www.goldenimportados.com" target="_blank" rel="noopener">goldenimportados.com</a>
+        </div>
+        <ul>
+          <li>Dominio propio con HTTPS</li>
+          <li>Checkout con datos de envío</li>
+          <li>Mercado Pago y transferencia</li>
+          <li>Confirmación automática del pago</li>
+          <li>Panel de ventas y envíos</li>
+          <li>Mail de confirmación con su marca</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== Glosario ===== -->
+  <section aria-labelledby="glosario">
+    <div class="head">
+      <span class="tag">Vocabulario</span>
+      <h2 id="glosario">Las palabras técnicas, en simple</h2>
+      <p>Para que entiendas cada parte de tu tienda y puedas hablar del tema con cualquiera.</p>
+    </div>
+    <dl class="glossary">
+      <div><dt>Dominio</dt><dd>La dirección de tu página (tunegocio.com). Se renueva una vez por año.</dd></div>
+      <div><dt>DNS</dt><dd>La "guía telefónica" de internet: conecta tu dominio con tu página y tus mails.</dd></div>
+      <div><dt>SSL / HTTPS</dt><dd>El candado del navegador. Cifra los datos entre el cliente y tu página.</dd></div>
+      <div><dt>Hosting</dt><dd>El servidor donde vive tu página para que esté online las 24 horas.</dd></div>
+      <div><dt>CDN</dt><dd>Copias de tu página en servidores de distintos lugares, para que cargue rápido.</dd></div>
+      <div><dt>Deploy</dt><dd>Publicar una versión nueva de la página. Se hace en minutos y sin cortes.</dd></div>
+      <div><dt>Responsive</dt><dd>Que la página se adapte bien a celular, tablet y computadora.</dd></div>
+      <div><dt>Checkout</dt><dd>La pantalla donde el cliente deja sus datos y elige cómo pagar.</dd></div>
+      <div><dt>Pasarela de pago</dt><dd>El servicio que procesa el cobro con tarjeta de forma segura (en este caso, Mercado Pago).</dd></div>
+      <div><dt>Webhook</dt><dd>Un aviso automático que Mercado Pago le manda a tu página cuando cambia el estado de un pago.</dd></div>
+      <div><dt>Backoffice</dt><dd>El panel privado desde donde manejás tu tienda.</dd></div>
+      <div><dt>Base de datos</dt><dd>Donde se guardan productos, pedidos y clientes de forma ordenada y segura.</dd></div>
+      <div><dt>Variables de entorno</dt><dd>El lugar protegido donde se guardan las claves secretas, fuera del código.</dd></div>
+      <div><dt>SEO</dt><dd>Lo que se hace para que Google entienda tu página y te muestre en las búsquedas.</dd></div>
+      <div><dt>SPF · DKIM · DMARC</dt><dd>Registros que demuestran que tus mails son legítimos, para que no caigan en spam.</dd></div>
+      <div><dt>Repositorio</dt><dd>El lugar donde se guarda el código de tu página, con el historial de cada cambio.</dd></div>
+      <div><dt>Píxel de Meta</dt><dd>Un código que le avisa a Instagram y Facebook quién visitó tu tienda y quién compró, para que tus anuncios lleguen a la gente correcta.</dd></div>
+      <div><dt>Google Analytics 4</dt><dd>El tablero de Google que muestra cuánta gente entra, de dónde viene y cuánto vende tu tienda.</dd></div>
+      <div><dt>Logo vectorizado (SVG)</dt><dd>Tu logo dibujado con formas en vez de píxeles: se ve nítido en cualquier tamaño, del celular a un cartel.</dd></div>
+    </dl>
+  </section>
+
+  <!-- ===== Preguntas ===== -->
+  <section aria-labelledby="preguntas">
+    <div class="head">
+      <span class="tag">FAQ</span>
+      <h2 id="preguntas">Preguntas frecuentes</h2>
+    </div>
+    <div class="faq">
+      <details><summary>¿Necesito tener cuenta de Mercado Pago?</summary><p>Sí, una cuenta a tu nombre, que es donde entra la plata. Si no tenés, te ayudo a crearla y a configurar los cobros online.</p></details>
+      <details><summary>¿Mis clientes necesitan cuenta de Mercado Pago para pagar?</summary><p>En general no: pueden cargar su tarjeta de débito o crédito en el momento y pagar sin cuenta. Si tienen cuenta, también pueden usar su saldo o una tarjeta guardada.</p></details>
+      <details><summary>¿Cuándo tengo la plata disponible?</summary><p>Depende del plazo que elijas en tu cuenta de Mercado Pago: al instante o a una cantidad de días, con distinta comisión. Las transferencias te llegan en el momento.</p></details>
+      <details><summary>¿Puedo cambiar precios y fotos yo solo?</summary><p>Sí, desde el panel, incluso desde el celular. Los cambios se ven en la tienda al instante.</p></details>
+      <details><summary>¿Puedo ofrecer cuotas?</summary><p>Sí, es opcional. Se pueden ofrecer con interés (lo paga el comprador) o sin interés (el costo lo asumís vos), según lo que permita tu cuenta de Mercado Pago.</p></details>
+      <details><summary>Hago publicidad en Instagram, ¿me sirve?</summary><p>Sí. Con Tienda Premium conectamos el Píxel de Meta: vas a ver cuántas ventas trajo cada anuncio, y Meta aprende a mostrárselo a gente con más chances de comprar.</p></details>
+      <details><summary>Vendo productos importados, ¿puedo poner los precios en dólares?</summary><p>Sí. Con Tienda Premium cargás el precio en dólares y la tienda lo muestra en pesos según la cotización del día, que también ves en tu panel.</p></details>
+      <details><summary>¿Qué pasa si después quiero más funciones?</summary><p>La tienda está hecha a medida, así que se le pueden sumar cosas sin empezar de nuevo: más productos, cupones, envíos, estadísticas.</p></details>
+      <details><summary>¿Tengo que pagar algo todos los meses?</summary><p>El desarrollo se paga una sola vez. El dominio y el servidor tienen un costo aparte, que te explico en la reunión.</p></details>
+      <details><summary>¿En qué se diferencia de Tiendanube o Shopify?</summary><p>Esas plataformas usan plantillas y cobran un abono mensual más comisiones propias. Acá pagás una sola vez, el diseño es exclusivo, el panel es simple y hecho a tu medida, y el dominio y las cuentas son tuyos.</p></details>
+    </div>
+  </section>
+
+  <!-- ===== Cierre ===== -->
+  <div class="close">
+    <span class="tag" style="color:inherit;opacity:.85">Próximo paso</span>
+    <h2>¿Arrancamos con tu tienda?</h2>
+    <p>Contame qué vendés, cómo cobrás hoy y cómo hacés los envíos. Con eso elegimos el paquete y te paso los plazos de entrega.</p>
+    <div class="close__actions">
+      <a class="wa-btn" href="https://wa.me/5491131100949?text=Hola!%20Vi%20tu%20propuesta%20de%20tiendas%20online%20y%20quiero%20consultar." target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3Z"/></svg>
+        Escribime por WhatsApp
+      </a>
+      <span class="close__number">
+        <span id="waNumber">+54 9 11 3110-0949</span>
+        <button type="button" class="copy-btn" id="copyNumber">Copiar número</button>
+      </span>
+    </div>
+  </div>
+</div>
+
+<a class="wa-float" href="https://wa.me/5491131100949?text=Hola!%20Vi%20tu%20propuesta%20de%20tiendas%20online%20y%20quiero%20consultar." target="_blank" rel="noopener" aria-label="Escribime por WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3Z"/></svg>
+  <span>WhatsApp</span>
+</a>
+
+<script>
+  document.getElementById("copyNumber").addEventListener("click", async (e) => {
+    const btn = e.currentTarget;
+    try {
+      await navigator.clipboard.writeText("+5491131100949");
+      btn.textContent = "Copiado";
+    } catch {
+      const range = document.createRange();
+      range.selectNodeContents(document.getElementById("waNumber"));
+      const sel = getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      btn.textContent = "Seleccionado: Ctrl+C";
+    }
+    setTimeout(() => { btn.textContent = "Copiar número"; }, 1800);
+  });
+</script>
+
+</html>
